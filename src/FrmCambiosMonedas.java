@@ -18,7 +18,7 @@ import javax.swing.JToolBar;
 import javax.swing.WindowConstants;
 
 import datechooser.beans.DateChooserCombo;
-
+import servicios.CambioMonedaServicio;
 
 public class FrmCambiosMonedas extends JFrame {
 
@@ -28,7 +28,6 @@ public class FrmCambiosMonedas extends JFrame {
     private JPanel pnlGrafica;
     private JPanel pnlEstadisticas;
 
-  
     public FrmCambiosMonedas() {
 
         setTitle("Cambios de Monedas");
@@ -102,7 +101,12 @@ public class FrmCambiosMonedas extends JFrame {
     }
 
     private void cargarDatos() {
+        String ruta = System.getProperty("user.dir") + "/src/datos/Cambios Monedas.csv";
+        var datos = CambioMonedaServicio.getDatos(ruta);
 
+        for(var cambio:datos){
+            System.out.println( cambio.getMoneda() + " - " + cambio.getFecha() + " - " + cambio.getValor());
+        }
     }
 
     private void btnGraficarClick() {
