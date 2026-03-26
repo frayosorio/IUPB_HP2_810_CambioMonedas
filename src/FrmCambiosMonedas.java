@@ -2,6 +2,9 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
@@ -17,6 +20,7 @@ import javax.swing.JToolBar;
 import javax.swing.WindowConstants;
 
 import datechooser.beans.DateChooserCombo;
+import modelos.CambioMoneda;
 import servicios.CambioMonedaServicio;
 
 public class FrmCambiosMonedas extends JFrame {
@@ -26,6 +30,8 @@ public class FrmCambiosMonedas extends JFrame {
     private JTabbedPane tpCambiosMoneda;
     private JPanel pnlGrafica;
     private JPanel pnlEstadisticas;
+
+    private List<CambioMoneda> datos;
 
     public FrmCambiosMonedas() {
 
@@ -101,16 +107,25 @@ public class FrmCambiosMonedas extends JFrame {
 
     private void cargarDatos() {
         String ruta = System.getProperty("user.dir") + "/src/datos/Cambios Monedas.csv";
-        var datos = CambioMonedaServicio.getDatos(ruta);
+        datos = CambioMonedaServicio.getDatos(ruta);
 
-       var monedas= CambioMonedaServicio.getMonedas(datos);
+        var monedas = CambioMonedaServicio.getMonedas(datos);
 
-       cmbMoneda.setModel(new DefaultComboBoxModel(monedas.toArray()));
+        cmbMoneda.setModel(new DefaultComboBoxModel(monedas.toArray()));
 
     }
 
     private void btnGraficarClick() {
+        if (cmbMoneda.getSelectedIndex() >= 0) {
+            //obtener datos para el filtro
+            String moneda=(String)cmbMoneda.getSelectedItem();
+            LocalDate desde=dccDesde.getSelectedDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            LocalDate hasta=dccHasta.getSelectedDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
+            var datosFiltrados=CambioMonedaServicio.filtrar(datos, moneda, desde, hasta);
+
+            
+        }
     }
 
     private void btnCalcularEstadisticasClick() {
