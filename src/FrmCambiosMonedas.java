@@ -3,9 +3,8 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import java.util.List;
-
 import javax.swing.BoxLayout;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -104,9 +103,10 @@ public class FrmCambiosMonedas extends JFrame {
         String ruta = System.getProperty("user.dir") + "/src/datos/Cambios Monedas.csv";
         var datos = CambioMonedaServicio.getDatos(ruta);
 
-        for(var cambio:datos){
-            System.out.println( cambio.getMoneda() + " - " + cambio.getFecha() + " - " + cambio.getValor());
-        }
+       var monedas= CambioMonedaServicio.getMonedas(datos);
+
+       cmbMoneda.setModel(new DefaultComboBoxModel(monedas.toArray()));
+
     }
 
     private void btnGraficarClick() {

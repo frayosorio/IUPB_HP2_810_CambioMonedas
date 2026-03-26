@@ -22,13 +22,28 @@ public class CambioMonedaServicio {
                     .map(linea -> linea.split(","))
                     .map(textos -> new CambioMoneda(textos[0],
                             LocalDate.parse(textos[1], formatoFecha),
-                            Double.parseDouble(textos[2])
-                    ))
+                            Double.parseDouble(textos[2])))
                     .collect(Collectors.toList());
 
         } catch (Exception e) {
             return Collections.emptyList();
         }
+    }
 
+    public static List<String> getMonedas(List<CambioMoneda> cambios) {
+        return cambios.stream()
+                .map(CambioMoneda::getMoneda)
+                .distinct()
+                .sorted()
+                .collect(Collectors.toList());
+    }
+
+    public static List<CambioMoneda> filtrar(List<CambioMoneda> cambios,
+            String moneda,
+            LocalDate desde, LocalDate hasta) {
+        return cambios.stream()
+                .filter(cambio -> cambio.getMoneda().equals(moneda)
+                        && !cambio.getFecha().isBefore(desde) && !cambio.getFecha().isAfter(hasta))
+                .collect(Collectors.toList());
     }
 }
