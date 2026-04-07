@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -46,4 +47,10 @@ public class CambioMonedaServicio {
                         && !cambio.getFecha().isBefore(desde) && !cambio.getFecha().isAfter(hasta))
                 .collect(Collectors.toList());
     }
+
+    public static Map<LocalDate, Double> getDatosGrafica(List<CambioMoneda> cambios) {
+        return cambios.stream()
+                .collect(Collectors.toMap(CambioMoneda::getFecha, CambioMoneda::getValor));
+    }
+
 }
